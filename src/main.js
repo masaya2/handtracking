@@ -17,21 +17,22 @@ async function main() {
     // 2. Setup Physics
     const physicsWorld = new PhysicsWorld();
 
-    // Create some objects
-    // Box
-    const boxBody = physicsWorld.createBox(1, 1, 1, { x: -2, y: 5, z: 0 });
-    const boxMesh = sceneManager.createBoxMesh(1, 1, 1, 0x00ffcc);
-    physicsWorld.addBody(boxBody, boxMesh);
+    // Create Forest Environment (Visuals)
+    for (let i = 0; i < 20; i++) {
+        const x = (Math.random() - 0.5) * 40;
+        const z = (Math.random() - 0.5) * 40 - 10; // Trees mostly in background
+        if (Math.abs(x) < 2 && Math.abs(z) < 2) continue; // Clear center area
+        sceneManager.createTreeMesh(x, z);
 
-    // Sphere
-    const sphereBody = physicsWorld.createSphere(0.7, { x: 2, y: 5, z: 0 });
-    const sphereMesh = sceneManager.createSphereMesh(0.7, 0xff0066);
-    physicsWorld.addBody(sphereBody, sphereMesh);
+        // Optional: Add physics for trees if desired
+        // physicsWorld.createCylinder(..., static) - simplified: just visual for now
+    }
 
-    // Another Box
-    const box2Body = physicsWorld.createBox(0.8, 0.8, 0.8, { x: 0, y: 8, z: 0 });
-    const box2Mesh = sceneManager.createBoxMesh(0.8, 0.8, 0.8, 0xffff00);
-    physicsWorld.addBody(box2Body, box2Mesh);
+    // Create Axe
+    const axePos = { x: 0, y: 5, z: 0 };
+    const axeBody = physicsWorld.createAxeBody(axePos);
+    const axeMesh = sceneManager.createAxeMesh();
+    physicsWorld.addBody(axeBody, axeMesh);
 
     // 3. Setup Hand Tracking
     const handTracker = new HandTracker(videoElement);

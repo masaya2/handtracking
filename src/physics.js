@@ -58,6 +58,29 @@ export class PhysicsWorld {
         return body;
     }
 
+    createAxeBody(position) {
+        const body = new CANNON.Body({
+            mass: 2, // Heavier
+            position: new CANNON.Vec3(position.x, position.y, position.z),
+            material: this.defaultMaterial
+        });
+
+        // Handle (Cylinder)
+        // Cannon Cylinder is aligned with Z axis. We want it along Y.
+        const handleShape = new CANNON.Cylinder(0.1, 0.1, 1.5, 8);
+        const q = new CANNON.Quaternion();
+        q.setFromEuler(-Math.PI / 2, 0, 0); // Rotate Z to Y
+        body.addShape(handleShape, new CANNON.Vec3(0, 0, 0), q);
+
+        // Blade (Box)
+        // Box takes half-extents
+        const bladeShape = new CANNON.Box(new CANNON.Vec3(0.4, 0.3, 0.05));
+        body.addShape(bladeShape, new CANNON.Vec3(0, 0.5, 0));
+
+        this.world.addBody(body);
+        return body;
+    }
+
     addBody(body, mesh) {
         this.world.addBody(body);
         this.bodies.push(body);

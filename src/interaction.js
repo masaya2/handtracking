@@ -117,12 +117,16 @@ export class InteractionManager {
         // Raycast or check overlap to find body
         // Using simple distance check to all physics bodies
         let closestBody = null;
-        let minDist = 1.0; // Max grab distance
+        let minDist = 1.5; // Max grab distance (Increased for better usability)
 
         for (let body of this.physicsWorld.bodies) {
             if (body.mass === 0) continue; // Don't grab static
 
             const distance = body.position.distanceTo(new CANNON.Vec3(position.x, position.y, position.z));
+
+            // Debug distance
+            // console.log("Dist to body", distance);
+
             if (distance < minDist) {
                 minDist = distance;
                 closestBody = body;
